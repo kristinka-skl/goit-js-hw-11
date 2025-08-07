@@ -25,10 +25,19 @@ a {
 
 button {
   cursor: pointer;
+  border: none;
+  outline: none;
 }
-
+input {
+  outline: none;  
+}
 img {
   display: block;
   max-width: 100%;
   height: auto;
+}
+fieldset {
+  margin: 0;
+  padding: 0;
+  outline: none;
 }
