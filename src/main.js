@@ -10,7 +10,7 @@ function handleFormElem(e){
         const imgArr = data.hits;
         console.log(imgArr);
         renderImages(imgArr);        
-    )
+    });
     e.target.reset();   
 }
 function imageTemplate ({webformatURL, largeImageURL, tags, likes, comments, downloads}) {
