@@ -1,23 +1,34 @@
 import { getImagesByQuery } from './js/pixabay-api';
 import { refs } from './js/refs';
+import { renderImages, clearGallery, showLoadInfo } from './js/render-functions'; 
+import iziToast from "izitoast";
+import "izitoast/dist/css/iziToast.min.css";
+
 refs.formELem.addEventListener('submit', handleFormElem);
 
-function handleFormElem(e){
+function handleFormElem(e) {
     e.preventDefault();
-    const query = e.target.elements.searchText.value;
-    console.log(query);    
+    clearGallery();
+    showLoadInfo();
+    const query = e.target.elements.searchText.value.trim();        
+    if (query === '') {
+        iziToast.info({
+            message: 'Please enter search words',
+            position: 'topRight',
+        })
+        return;
+    } 
     getImagesByQuery(query).then(data=>{
-        const imgArr = data.hits;
-        console.log(imgArr);
-        renderImages(imgArr);        
-    });
-    e.target.reset();   
-}
-function imageTemplate ({webformatURL, largeImageURL, tags, likes, comments, downloads}) {
-    return `<li><a href="${largeImageURL}"><img src="${webformatURL}" alt="${tags}"></a><p>Likes: ${likes} | Comments: ${comments} | Downloads: ${downloads}</p></li>`
-}
-
-function renderImages(imgArr) {
-  const markup = imgArr.map(imageTemplate).join('');
-  refs.imagesList.insertAdjacentHTML('afterbegin', markup);
+        const imgArr = data.hits;            
+        if (imgArr.length === 0) {
+            iziToast.error({
+                title: 'Nothing found!',
+                message: `Sorry, there are no images matching your search "${query}". Please try again!`,
+                position: 'topRight',
+            })
+        } else {
+            renderImages(imgArr);
+            e.target.reset();
+        }
+    });        
 }
