@@ -25,12 +25,9 @@ export function clearGallery() {
     refs.imagesList.innerHTML = '';
 }
 
-// Я вирішила спробувати реалізувати лоадер не через додавання та видалення класу,
-// якщо це помилка, то поясніть, будь ласка, чому
 export function showLoadInfo() {
-    const loader = '<div class="loader-container"><span class="loader"></span></div>';
-    refs.imagesList.insertAdjacentHTML('afterbegin', loader);
-    document.addEventListener('iziToast-closing', () => {
-        document.querySelectorAll('.loader-container').forEach(el => el.remove());
-    });
+    refs.loaderElem.classList.remove('visually-hidden');
+}
+export function hideLoadInfo() {
+    refs.loaderElem.classList.add('visually-hidden');
  }
