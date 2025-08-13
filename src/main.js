@@ -10,7 +10,7 @@ function handleFormElem(e) {
     e.preventDefault();
     clearGallery();
     showLoadInfo();
-    const query = e.target.elements.searchText.value.trim();        
+    const query = e.target.elements.searchText.value.trim();
     if (query === '') {
         iziToast.info({
             message: 'Please enter search words',
@@ -18,19 +18,28 @@ function handleFormElem(e) {
         })
         hideLoadInfo();
         return;
-    } 
-    getImagesByQuery(query).then(data=>{
-        const imgArr = data.hits;
-        hideLoadInfo();
-        if (imgArr.length === 0) {
-            iziToast.error({
-                title: 'Nothing found!',
-                message: `Sorry, there are no images matching your search "${query}". Please try again!`,
+    }
+    getImagesByQuery(query)
+        .then(data => {
+            const imgArr = data.hits;
+            hideLoadInfo();
+            if (imgArr.length === 0) {
+                iziToast.error({
+                    title: 'Nothing found!',
+                    message: `Sorry, there are no images matching your search "${query}". Please try again!`,
+                    position: 'topRight',
+                })
+            } else {
+                renderImages(imgArr);
+                e.target.reset();
+            }
+        })
+        .catch(error => {
+            console.log(error);
+            hideLoadInfo();
+            iziToast.error({                
+                message: `Sorry, we have connection problems. Please try again!`,
                 position: 'topRight',
-            })
-        } else {            
-            renderImages(imgArr);
-            e.target.reset();
-        }
-    });        
+            });
+        });            
 }
